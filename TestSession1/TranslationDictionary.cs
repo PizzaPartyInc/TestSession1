@@ -7,7 +7,7 @@ namespace TestSession1
 {
     public class TranslationDictionary
     {
-        public List<TranslationEntry> Dictionary;
+        public List<TranslationEntry> Dictionary { get; }
         public TranslationDictionary()
         {
             Dictionary = new List<TranslationEntry>();
@@ -20,10 +20,10 @@ namespace TestSession1
             if (string.IsNullOrWhiteSpace(toWord)) throw new ArgumentNullException(nameof(toWord));
             if (string.IsNullOrWhiteSpace(toLanguage)) throw new ArgumentNullException(nameof(toLanguage));
 
-            fromWord = fromWord.Trim().ToLowerInvariant();
-            fromLanguage = fromLanguage.Trim().ToLowerInvariant();
-            toWord = toWord.Trim().ToLowerInvariant();
-            toLanguage = toLanguage.Trim().ToLowerInvariant();
+            fromWord = fromWord.Trim();
+            fromLanguage = fromLanguage.Trim();
+            toWord = toWord.Trim();
+            toLanguage = toLanguage.Trim();
 
             if (Dictionary.Any(de => (de.FromWord.Equals(fromWord, StringComparison.InvariantCultureIgnoreCase) &&
                                       de.FromLanguage.Equals(fromLanguage, StringComparison.InvariantCultureIgnoreCase) &&
@@ -53,8 +53,8 @@ namespace TestSession1
             if (string.IsNullOrWhiteSpace(word)) throw new ArgumentNullException(nameof(word));
             if (string.IsNullOrWhiteSpace(language)) throw new ArgumentNullException(nameof(language));
 
-            word = word.Trim().ToLowerInvariant();
-            language = language.Trim().ToLowerInvariant();
+            word = word.Trim();
+            language = language.Trim();
 
             Dictionary.RemoveAll(de => (de.FromWord.Equals(word, StringComparison.InvariantCultureIgnoreCase) &&
                                         de.FromLanguage.Equals(language, StringComparison.InvariantCultureIgnoreCase))
@@ -74,9 +74,9 @@ namespace TestSession1
             if (string.IsNullOrWhiteSpace(fromLanguage)) throw new ArgumentNullException(nameof(fromLanguage));
             if (string.IsNullOrWhiteSpace(toLanguage)) throw new ArgumentNullException(nameof(toLanguage));
 
-            fromWord = fromWord.Trim().ToLowerInvariant();
-            fromLanguage = fromLanguage.Trim().ToLowerInvariant();
-            toLanguage = toLanguage.Trim().ToLowerInvariant();
+            fromWord = fromWord.Trim();
+            fromLanguage = fromLanguage.Trim();
+            toLanguage = toLanguage.Trim();
 
             var result = Dictionary.SingleOrDefault(de => de.FromWord.Equals(fromWord, StringComparison.InvariantCultureIgnoreCase) &&
                                                           de.FromLanguage.Equals(fromLanguage, StringComparison.InvariantCultureIgnoreCase) && 

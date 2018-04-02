@@ -8,6 +8,13 @@ namespace TestSession1Tests
     [TestClass]
     public class TranslationDictionaryTests
     {
+        private TranslationDictionary _translationDictionary { get; }
+        public TranslationDictionaryTests()
+        {
+
+            _translationDictionary = new TranslationDictionary();
+        }
+
         [DataTestMethod]
         [DataRow("Hello ", "English", "Tere", "Estonian")]
         [DataRow("hellO", " English", "Привет", "Russian")]
@@ -18,40 +25,34 @@ namespace TestSession1Tests
         public void Test_TranslationDictionary_AddEntry_Saves_Valid_Data(
             string fromWord, string fromLanguage, string toWord, string toLanguage)
         {
-            //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-
             //Act
-            translationDictionary.AddEntry(fromWord, fromLanguage, toWord, toLanguage);
+            _translationDictionary.AddEntry(fromWord, fromLanguage, toWord, toLanguage);
 
             //Assert
-            Assert.AreEqual(1, translationDictionary.Dictionary.Count);
-            Assert.AreEqual(fromWord.Trim().ToLowerInvariant(), translationDictionary.Dictionary.First().FromWord);
-            Assert.AreEqual(fromLanguage.Trim().ToLowerInvariant(), translationDictionary.Dictionary.First().FromLanguage);
-            Assert.AreEqual(toWord.Trim().ToLowerInvariant(), translationDictionary.Dictionary.First().ToWord);
-            Assert.AreEqual(toLanguage.Trim().ToLowerInvariant(), translationDictionary.Dictionary.First().ToLanguage);
+            Assert.AreEqual(1, _translationDictionary.Dictionary.Count);
+            Assert.AreEqual(fromWord.Trim(), _translationDictionary.Dictionary.First().FromWord);
+            Assert.AreEqual(fromLanguage.Trim(), _translationDictionary.Dictionary.First().FromLanguage);
+            Assert.AreEqual(toWord.Trim(), _translationDictionary.Dictionary.First().ToWord);
+            Assert.AreEqual(toLanguage.Trim(), _translationDictionary.Dictionary.First().ToLanguage);
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_AddEntry_For_Two_Languages_And_Same_FromWord_Saves_Both_Entries()
         {
-            //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-
             //Act
-            translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
-            translationDictionary.AddEntry("Hello", "English", "여보세요", "Korean");
+            _translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English", "여보세요", "Korean");
 
             //Assert
-            Assert.AreEqual(2, translationDictionary.Dictionary.Count);
-            Assert.AreEqual("hello", translationDictionary.Dictionary.First().FromWord);
-            Assert.AreEqual("english", translationDictionary.Dictionary.First().FromLanguage);
-            Assert.AreEqual("tere", translationDictionary.Dictionary.First().ToWord);
-            Assert.AreEqual("estonian", translationDictionary.Dictionary.First().ToLanguage);
-            Assert.AreEqual("hello", translationDictionary.Dictionary.Last().FromWord);
-            Assert.AreEqual("english", translationDictionary.Dictionary.Last().FromLanguage);
-            Assert.AreEqual("여보세요", translationDictionary.Dictionary.Last().ToWord);
-            Assert.AreEqual("korean", translationDictionary.Dictionary.Last().ToLanguage);
+            Assert.AreEqual(2, _translationDictionary.Dictionary.Count);
+            Assert.AreEqual("Hello", _translationDictionary.Dictionary.First().FromWord);
+            Assert.AreEqual("English", _translationDictionary.Dictionary.First().FromLanguage);
+            Assert.AreEqual("Tere", _translationDictionary.Dictionary.First().ToWord);
+            Assert.AreEqual("Estonian", _translationDictionary.Dictionary.First().ToLanguage);
+            Assert.AreEqual("Hello", _translationDictionary.Dictionary.Last().FromWord);
+            Assert.AreEqual("English", _translationDictionary.Dictionary.Last().FromLanguage);
+            Assert.AreEqual("여보세요", _translationDictionary.Dictionary.Last().ToWord);
+            Assert.AreEqual("Korean", _translationDictionary.Dictionary.Last().ToLanguage);
         }
 
         [DataTestMethod]
@@ -64,19 +65,16 @@ namespace TestSession1Tests
         public void Test_TranslationDictionary_AddEntry_For_Different_Duplicate_Cases_Saves_Only_First_Entry(
             string fromWord, string fromLanguage, string toWord, string toLanguage)
         {
-            //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-
             //Act
-            translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
-            translationDictionary.AddEntry(fromWord, fromLanguage, toWord, toLanguage);
+            _translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
+            _translationDictionary.AddEntry(fromWord, fromLanguage, toWord, toLanguage);
 
             //Assert
-            Assert.AreEqual(1, translationDictionary.Dictionary.Count);
-            Assert.AreEqual("hello", translationDictionary.Dictionary.First().FromWord);
-            Assert.AreEqual("english", translationDictionary.Dictionary.First().FromLanguage);
-            Assert.AreEqual("tere", translationDictionary.Dictionary.First().ToWord);
-            Assert.AreEqual("estonian", translationDictionary.Dictionary.First().ToLanguage);
+            Assert.AreEqual(1, _translationDictionary.Dictionary.Count);
+            Assert.AreEqual("Hello", _translationDictionary.Dictionary.First().FromWord);
+            Assert.AreEqual("English", _translationDictionary.Dictionary.First().FromLanguage);
+            Assert.AreEqual("Tere", _translationDictionary.Dictionary.First().ToWord);
+            Assert.AreEqual("Estonian", _translationDictionary.Dictionary.First().ToLanguage);
         }
 
         [DataTestMethod]
@@ -94,111 +92,100 @@ namespace TestSession1Tests
         [DataRow("Hello", "English", "Tere", " ")]
         public void Test_TranslationDictionary_AddEntry_With_Null_Or_Empty_Or_Whitespace_Arguments_Throws_ArgumentNullException(
             string fromWord, string fromLanguage, string toWord, string toLanguage)
-        {
-            //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            
+        {            
             //Assert
-            Assert.ThrowsException<ArgumentNullException>(() => translationDictionary.AddEntry(fromWord, fromLanguage, toWord, toLanguage));
+            Assert.ThrowsException<ArgumentNullException>(() => _translationDictionary.AddEntry(fromWord, fromLanguage, toWord, toLanguage));
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_Remove_For_Empty_Dictionary_Throws_No_Exceptions()
         {
-            //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-
             //Assert
-            Assert.AreEqual(0, translationDictionary.Dictionary.Count);
-            translationDictionary.Remove("Hello", "English");
+            Assert.AreEqual(0, _translationDictionary.Dictionary.Count);
+            _translationDictionary.Remove("Hello", "English");
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_Remove_With_From_Values_Removes_Single_Entry()
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
 
             //Act
-            translationDictionary.Remove("Hello", "English");
+            _translationDictionary.Remove("Hello", "English");
 
             //Assert
-            Assert.AreEqual(0, translationDictionary.Dictionary.Count);
+            Assert.AreEqual(0, _translationDictionary.Dictionary.Count);
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_Remove_With_To_Values_Removes_Single_Entry()
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
 
             //Act
-            translationDictionary.Remove("Tere", "Estonian");
+            _translationDictionary.Remove("Tere", "Estonian");
 
             //Assert
-            Assert.AreEqual(0, translationDictionary.Dictionary.Count);
+            Assert.AreEqual(0, _translationDictionary.Dictionary.Count);
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_Remove_Removes_Multiple_Entries()
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
-            translationDictionary.AddEntry("Hello", "English", "Привет", "Russian");
-            translationDictionary.AddEntry("Hello", "English", "こんにちは", "Japanese");
+            _translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English", "Привет", "Russian");
+            _translationDictionary.AddEntry("Hello", "English", "こんにちは", "Japanese");
 
             //Act
-            translationDictionary.Remove("Hello", "English");
+            _translationDictionary.Remove("Hello", "English");
 
             //Assert
-            Assert.AreEqual(0, translationDictionary.Dictionary.Count);
+            Assert.AreEqual(0, _translationDictionary.Dictionary.Count);
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_Remove_With_Other_Entries_Removes_Valid_Entries()
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry(" Привет", "Russian", "Tere", "Estonian");
-            translationDictionary.AddEntry("Hello", "English ", "Tere", "Estonian");
-            translationDictionary.AddEntry("Hello", "English", "Привет", "Russian");
-            translationDictionary.AddEntry("Hello", "English", "こんにちは", "Japanese");
-            translationDictionary.AddEntry("Tere", "Estonian", "こんにちは", "Japanese");
+            _translationDictionary.AddEntry(" Привет", "Russian", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English ", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English", "Привет", "Russian");
+            _translationDictionary.AddEntry("Hello", "English", "こんにちは", "Japanese");
+            _translationDictionary.AddEntry("Tere", "Estonian", "こんにちは", "Japanese");
 
             //Act
-            translationDictionary.Remove("Hello", "English");
+            _translationDictionary.Remove("Hello", "English");
 
             //Assert
-            Assert.AreEqual(2, translationDictionary.Dictionary.Count);
-            Assert.AreEqual("привет", translationDictionary.Dictionary.First().FromWord);
-            Assert.AreEqual("russian", translationDictionary.Dictionary.First().FromLanguage);
-            Assert.AreEqual("tere", translationDictionary.Dictionary.First().ToWord);
-            Assert.AreEqual("estonian", translationDictionary.Dictionary.First().ToLanguage);
-            Assert.AreEqual("tere", translationDictionary.Dictionary.Last().FromWord);
-            Assert.AreEqual("estonian", translationDictionary.Dictionary.Last().FromLanguage);
-            Assert.AreEqual("こんにちは", translationDictionary.Dictionary.Last().ToWord);
-            Assert.AreEqual("japanese", translationDictionary.Dictionary.Last().ToLanguage);
+            Assert.AreEqual(2, _translationDictionary.Dictionary.Count);
+            Assert.AreEqual("Привет", _translationDictionary.Dictionary.First().FromWord);
+            Assert.AreEqual("Russian", _translationDictionary.Dictionary.First().FromLanguage);
+            Assert.AreEqual("Tere", _translationDictionary.Dictionary.First().ToWord);
+            Assert.AreEqual("Estonian", _translationDictionary.Dictionary.First().ToLanguage);
+            Assert.AreEqual("Tere", _translationDictionary.Dictionary.Last().FromWord);
+            Assert.AreEqual("Estonian", _translationDictionary.Dictionary.Last().FromLanguage);
+            Assert.AreEqual("こんにちは", _translationDictionary.Dictionary.Last().ToWord);
+            Assert.AreEqual("Japanese", _translationDictionary.Dictionary.Last().ToLanguage);
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_Clear_Removes_All_Entries()
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry("Привет", "Russian", "Tere", "Estonian");
-            translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
-            translationDictionary.AddEntry("Hello", "English", "Привет", "Russian");
-            translationDictionary.AddEntry("Hello", "English", "こんにちは", "Japanese");
-            translationDictionary.AddEntry("Tere", "Estonian", "こんにちは", "Japanese");
+            _translationDictionary.AddEntry("Привет", "Russian", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English", "Привет", "Russian");
+            _translationDictionary.AddEntry("Hello", "English", "こんにちは", "Japanese");
+            _translationDictionary.AddEntry("Tere", "Estonian", "こんにちは", "Japanese");
 
             //Act
-            translationDictionary.Clear();
+            _translationDictionary.Clear();
 
             //Assert
-            Assert.AreEqual(0, translationDictionary.Dictionary.Count);
+            Assert.AreEqual(0, _translationDictionary.Dictionary.Count);
         }
 
         [DataTestMethod]
@@ -212,14 +199,13 @@ namespace TestSession1Tests
             string word, string language)
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry("Hello", "English ", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English ", "Tere", "Estonian");
 
             //Act
-            translationDictionary.Remove(word, language);
+            _translationDictionary.Remove(word, language);
 
             //Assert
-            Assert.AreEqual(0, translationDictionary.Dictionary.Count);
+            Assert.AreEqual(0, _translationDictionary.Dictionary.Count);
         }
 
         [DataRow(null, "English")]
@@ -231,49 +217,41 @@ namespace TestSession1Tests
         public void Test_TranslationDictionary_Remove_With_Null_Or_Empty_Or_Whitespace_Arguments_Throws_ArgumentNullException(
             string word, string language)
         {
-            //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-
             //Assert
-            Assert.ThrowsException<ArgumentNullException>(() => translationDictionary.Remove(word, language));
+            Assert.ThrowsException<ArgumentNullException>(() => _translationDictionary.Remove(word, language));
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_Translate_For_FromWord_Returns_Valid_Word()
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry("Привет", "Russian", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Привет", "Russian", "Tere", "Estonian");
 
             //Act
-            var result = translationDictionary.Translate("Привет", "Russian", "Estonian");
+            var result = _translationDictionary.Translate("Привет", "Russian", "Estonian");
 
             //Assert
-            Assert.AreEqual("tere", result);
+            Assert.AreEqual("Tere", result);
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_Translate_For_ToWord_Returns_Valid_Word()
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry("Привет", "Russian", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Привет", "Russian", "Tere", "Estonian");
 
             //Act
-            var result = translationDictionary.Translate("Tere", "Estonian", "Russian");
+            var result = _translationDictionary.Translate("Tere", "Estonian", "Russian");
 
             //Assert
-            Assert.AreEqual("привет", result);
+            Assert.AreEqual("Привет", result);
         }
 
         [TestMethod]
         public void Test_TranslationDictionary_Translate_With_Empty_Dictionary_Throws_NullReferenceException()
         {
-            //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-
             //Assert
-            Assert.ThrowsException<NullReferenceException>(() => translationDictionary.Translate("Tere", "Estonian", "Russian"));
+            Assert.ThrowsException<NullReferenceException>(() => _translationDictionary.Translate("Tere", "Estonian", "Russian"));
         }
 
         [DataTestMethod]
@@ -285,11 +263,10 @@ namespace TestSession1Tests
             string fromWord, string fromLanguage, string toLanguage)
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry("Привет", "Russian", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Привет", "Russian", "Tere", "Estonian");
 
             //Assert
-            Assert.ThrowsException<NullReferenceException>(() => translationDictionary.Translate(fromWord, fromLanguage, toLanguage));
+            Assert.ThrowsException<NullReferenceException>(() => _translationDictionary.Translate(fromWord, fromLanguage, toLanguage));
         }
 
         [DataTestMethod]
@@ -300,14 +277,35 @@ namespace TestSession1Tests
             string fromWord, string fromLanguage, string toLanguage)
         {
             //Arrange
-            TranslationDictionary translationDictionary = new TranslationDictionary();
-            translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
+            _translationDictionary.AddEntry("Hello", "English", "Tere", "Estonian");
 
             //Act
-            var result = translationDictionary.Translate(fromWord, fromLanguage, toLanguage);
+            var result = _translationDictionary.Translate(fromWord, fromLanguage, toLanguage);
 
             //Assert
-            Assert.AreEqual("tere", result);
+            Assert.AreEqual("Tere", result);
+        }
+
+        [DataTestMethod]
+        [DataRow("Street", "English", "Straße", "German")]
+        [DataRow("Straße", "German", "Street", "English")]
+        [DataRow("der", "German", "of the", "English")]
+        [DataRow("of the", "English", "der", "German")]
+        [DataRow("this", "English", "هذه", "Arabic")]
+        [DataRow("هذه", "Arabic", "this", "English")]
+        [DataRow("don't", "English", "немој", "Serbian")]
+        [DataRow("немој", "Serbian", "don't", "English")]
+        public void Test_TranslationDictionary_Translate_Special_Cases_Returns_Valid_Word(
+            string fromWord, string fromLanguage, string toLanguage, string translation)
+        {
+            //Arrange
+            _translationDictionary.AddEntry(fromWord, fromLanguage, translation, toLanguage);
+
+            //Act
+            var result = _translationDictionary.Translate(fromWord, fromLanguage, toLanguage);
+
+            //Assert
+            Assert.AreEqual(translation, result);
         }
     }
 }
